@@ -17,7 +17,7 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
 "esri/tasks/query", "esri/geometry/Circle", "esri/symbols/PictureMarkerSymbol",
 "esri/graphic", "esri/symbols/SimpleMarkerSymbol",
 "esri/symbols/SimpleLineSymbol", "esri/symbols/SimpleFillSymbol", "esri/renderers/SimpleRenderer",
-"esri/config", "esri/Color", "dojo/dom", "dojo/domReady!", 'jimu/BaseWidget'],
+"esri/config", "esri/Color", "dojo/dom", 'jimu/BaseWidget'],
   function(declare,FeatureLayer,
     Query, Circle, PictureMarkerSymbol,
     Graphic, SimpleMarkerSymbol,
@@ -40,12 +40,16 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
       },
 
       startup: function() {
-       console.log('startup');
+       console.log('startup', this.map);
       },
 
       onOpen: function(){
         console.log('onOpen');
-        var estacionesLayer = new FeatureLayer("https://services5.arcgis.com/zZdalPw2d0tQx8G1/arcgis/rest/services/Usuarios_Demanda/FeatureServer/0", {
+      },
+
+      funcionUsuario: function(){
+        console.log('onOpen');
+        var usuariosApp = new FeatureLayer("https://services3.arcgis.com/lnFkorfBb3ma2riJ/arcgis/rest/services/Aparcabicis/FeatureServer/0/", {
           outFields: ["*"]
       });
   
@@ -53,63 +57,67 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
       var marker = new PictureMarkerSymbol();
       marker.setHeight(15);
       marker.setWidth(20);
-      marker.setUrl("http://cdn.onlinewebfonts.com/svg/img_538285.png");
-      estacionesLayer.setSelectionSymbol(marker);
+      marker.setUrl("https://cdn-icons-png.flaticon.com/512/10/10624.png");
+      usuariosApp.setSelectionSymbol(marker);
   
       // Make unselected features invisible
       var nullSymbol = new SimpleMarkerSymbol().setSize(0);
-      estacionesLayer.setRenderer(new SimpleRenderer(nullSymbol));
+      usuariosApp.setRenderer(new SimpleRenderer(nullSymbol));
   
-      map.addLayer(estacionesLayer);
+      this.map.addLayer(usuariosApp);
   
-      var circleSymb = new SimpleFillSymbol(
+      var circulo = new SimpleFillSymbol(
           SimpleFillSymbol.STYLE_NULL,
           new SimpleLineSymbol(
               SimpleLineSymbol.STYLE_SHORTDASHDOTDOT,
-              new Color([105, 105, 105]),
+              new Color([255, 255, 0]),
               2
           ), new Color([255, 255, 0, 0.25])
       );
       var circle;
   
       // When the map is clicked create a buffer around the click point of the specified distance
-      map.on("click", function (evt) {
+      this.map.on("click", function (evt) {
           circle = new Circle({
               center: evt.mapPoint,
               geodesic: true,
               radius: 500,
               radiusUnit: "esriMeters"
           });
-          map.graphics.clear();
-          var graphic = new Graphic(circle, circleSymb);
-          map.graphics.add(graphic);
+          console.log("hola", this)
+          this.graphics.clear();
+          var añadirCirculo = new Graphic(circle, circulo);
+          this.graphics.add(añadirCirculo);
   
           var query = new Query();
           query.geometry = circle.getExtent();
           // Use a fast bounding box query. It will only go to the server if bounding box is outside of the visible map.
-          estacionesLayer.queryFeatures(query, selectInBuffer);
+          usuariosApp.queryFeatures(query, selectInBuffer);
       });
   
       function selectInBuffer(response) {
           var feature;
           var features = response.features;
+          console.log("buenas", features)
           var inBuffer = [];
           // Filter out features that are not actually in buffer, since we got all points in the buffer's bounding box
           for (var i = 0; i < features.length; i++) {
               feature = features[i];
               if (circle.contains(feature.geometry)) {
-                  inBuffer.push(feature.attributes[estacionesLayer.objectIdField]);
+                  inBuffer.push(feature.attributes[usuariosApp.objectIdField]);
               }
           }
+          console.log("buenas2", feature)
           var query = new Query();
           query.objectIds = inBuffer;
           // Use an objectIds selection query (should not need to go to the server)
-          estacionesLayer.selectFeatures(query, FeatureLayer.SELECTION_NEW);
+          usuariosApp.selectFeatures(query, FeatureLayer.SELECTION_NEW);
       }
       },
 
       onClose: function(){
         console.log('onClose');
+        // this.map.graphics.hide()
       },
 
       // onMinimize: function(){

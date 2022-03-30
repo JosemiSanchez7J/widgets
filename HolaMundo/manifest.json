@@ -1,0 +1,25 @@
+{
+  "name": "HolaMundo",
+  "label":"Hola Mundo Con Espacios",
+  "2D": true,
+  "3D": false,
+  "platform": "HTML",
+  "version": "2.23",
+  "wabVersion": "2.23",
+  "author": "Josemi",
+  "description": "primer widget de muchos",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+		"inPanel":true,
+		"hasLocale": false,
+		"hasStyle":true,
+		"hasConfig":false,
+		"hasUIFile":true,
+		"hasSettingPage": false,
+		"hasSettingUIFile":false,
+		"hasSettingLocale":false,
+		"hasSettingStyle":false,
+		"IsController":false
+  }
+}

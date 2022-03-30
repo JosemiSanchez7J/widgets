@@ -45,8 +45,8 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
 
       onOpen: function(){
         console.log('onOpen');
-        var estacionesLayer = new FeatureLayer("https://services3.arcgis.com/lnFkorfBb3ma2riJ/arcgis/rest/services/Aparcabicis/FeatureServer/0/", {
-          outFields: ["DIRECCION"]
+        var estacionesLayer = new FeatureLayer("https://services5.arcgis.com/zZdalPw2d0tQx8G1/arcgis/rest/services/Usuarios_Demanda/FeatureServer/0", {
+          outFields: ["*"]
       });
   
       // Simbología marcado

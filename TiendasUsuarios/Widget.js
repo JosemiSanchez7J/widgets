@@ -49,7 +49,7 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
 
       funcionUsuario: function(){
         console.log('onOpen');
-        var usuariosApp = new FeatureLayer("https://services3.arcgis.com/lnFkorfBb3ma2riJ/arcgis/rest/services/Aparcabicis/FeatureServer/0/", {
+        var usuariosApp = new FeatureLayer("https://services5.arcgis.com/zZdalPw2d0tQx8G1/arcgis/rest/services/Usuarios_Demanda/FeatureServer/0/", {
           outFields: ["*"]
       });
   
@@ -105,13 +105,14 @@ define(['dojo/_base/declare', "esri/layers/FeatureLayer",
               feature = features[i];
               if (circle.contains(feature.geometry)) {
                   inBuffer.push(feature.attributes[usuariosApp.objectIdField]);
+                  console.log("lelo2", feature.attributes[usuariosApp.objectIdField])
               }
           }
           console.log("buenas2", feature)
           var query = new Query();
           query.objectIds = inBuffer;
           // Use an objectIds selection query (should not need to go to the server)
-          usuariosApp.selectFeatures(query, FeatureLayer.SELECTION_NEW);
+           usuariosApp.selectFeatures(query, FeatureLayer.SELECTION_NEW);
       }
       },
 
